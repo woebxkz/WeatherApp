@@ -71,7 +71,11 @@ public class Location {
     }
 
 
-    private void checkValues(UUID id, double longtitude, double latitude, String city, String region,
+    private void checkValues(UUID id,
+                             double longtitude,
+                             double latitude,
+                             String city,
+                             String region,
                              String country) throws CreationException {
 
         if (longtitude < -180 || longtitude > 180) cee("Nieprawdiłowa długość geograficzna");

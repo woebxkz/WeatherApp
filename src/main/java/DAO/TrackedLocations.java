@@ -41,7 +41,11 @@ public class TrackedLocations {
 
         Map<UUID, Location> loc = this.locations;
 
-        loc = loc.entrySet().stream().filter( e -> !e.getValue().getCity().equals(name)).collect(Collectors.toMap(s -> s.getKey(), s -> s.getValue()));
+        loc = loc.entrySet().stream().filter( e -> !e.getValue()
+                .getCity()
+                .equals(name))
+                .collect(Collectors
+                        .toMap(s -> s.getKey(), s -> s.getValue()));
 //		for (Map.Entry<UUID, Location> entry : loc.entrySet()) {
 //			UUID key = entry.getKey();
 //			Location val = entry.getValue();
