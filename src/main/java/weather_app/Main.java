@@ -1,10 +1,18 @@
-package WeatherApp;
+package weather_app;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
-import DAO.Location;
-import DAO.TrackedLocations;
+import com.google.gson.Gson;
+import dao.Location;
+import dao.TrackedLocations;
+import open_meteo_api.OpenMeteoApi;
+import open_meteo_api.OpenMeteoApiResults;
+import open_meteo_api.OpenMeteoVariables;
 import util.CreationException;
 
 public class Main {
@@ -14,11 +22,36 @@ public class Main {
     private static TrackedLocations locat;
     private static int licz;
 
-    public static void main(String ... args) {
+    public static void main(String[] args) {
+
+        Gson gson = new Gson();
+
         locat = new TrackedLocations();
+
+        List<OpenMeteoVariables> list = new ArrayList<>();
+        list.add(OpenMeteoVariables.TEMPERATURE);
+        list.add(OpenMeteoVariables.RELATIVE_HUMIDITY);
+        list.add(OpenMeteoVariables.SEA_LEVEL_PRESSURE);
+        list.add(OpenMeteoVariables.WIND_SPEED);
+        list.add(OpenMeteoVariables.WIND_DIRECTION);
+
+        OpenMeteoApi openMeteoApi = new OpenMeteoApi(52.2298,21.0118,list);
+
+        try {
+            OpenMeteoApiResults result = openMeteoApi.getAllData();
+
+            Arrays.stream(result.getHourly().getTime()).sequential().forEach(System.out::println);
+            Arrays.stream(result.getHourly().getTemperature_2m()).sequential().forEach(System.out::println);
+            Arrays.stream(result.getHourly().getRelative_humidity_2m()).sequential().forEach(System.out::println);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         while(true) {
             chooseFromMenu();
         }
+
     }
 
     private static void chooseFromMenu() {
@@ -91,7 +124,5 @@ public class Main {
 //			System.out.println("l = " + l);
 //			System.out.println(licznik);
         }
-
-
     }
 }
