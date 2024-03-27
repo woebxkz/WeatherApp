@@ -51,33 +51,42 @@ public class MySQLConnection {
         try (Statement statement = connection.createStatement()) {
             final ResultSet resultSet = statement.executeQuery("SELECT * FROM Locations");
             while (resultSet.next()) {
-                System.out.println("ID " + resultSet.getInt("ID"));
-                System.out.println("Longtitude " + resultSet.getString("Longtitude"));
-                System.out.println("Latitude " + resultSet.getString("Latitude"));
-                System.out.println("City " + resultSet.getString("City"));
-                System.out.println("Region " + resultSet.getString("Region"));
-                System.out.println("Country " + resultSet.getString("Country"));
+                System.out.println("ID " + resultSet.getInt("id"));
+                System.out.println("Longtitude " + resultSet.getDouble("longtitude"));
+                System.out.println("Latitude " + resultSet.getDouble("latitude"));
+                System.out.println("City " + resultSet.getString("city"));
+                System.out.println("Region " + resultSet.getString("region"));
+                System.out.println("Country " + resultSet.getString("country"));
             }
         }
     }
         //create table
-        public void createTables() {
-            Connection connection1 = new MySQLConnection().getConnection();
+        public void createTableLocations() {
             try {
                 Statement statement = connection.createStatement();
-                String sql = "CREATE TABLE IF NOT EXISTS weather(date VARCHAR(50), " +
-                        "clouds VARCHAR(50), " +
-                        "id INT, " +
-                        "humidity DOUBLE, " +
-                        "temperature DOUBLE, " +
-                        "wind_speed DOUBLE, " +
-                        "deg DOUBLE);";
+                String sql = "CREATE TABLE IF NOT EXISTS Locations(id INT, " +
+                        "longtitude DOUBLE, " +
+                        "latitude DOUBLE, " +
+                        "city VARCHAR(50), " +
+                        "region VARCHAR(50), " +
+                        "country VARCHAR(50));";
                 statement.execute(sql);
-                System.out.println("Utworzono bazę danych");
+                System.out.println("Utworzono tabelę Locations");
                 statement.close();
                 connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
     }
+
+    public static void main(String... args){
+
+        MySQLConnection mySQLConnection = new MySQLConnection();
+        mySQLConnection.connect();
+        mySQLConnection.createTableLocations();
+        mySQLConnection.disconnect();
+
+    }
+
+
 }
