@@ -1,6 +1,7 @@
 package dao;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -15,7 +16,6 @@ public class TrackedLocations {
 
 
     public Map<UUID, Location> getLocations() {
-//		Map<UUID, Location> mapLoc = this.locations;
         return this.locations;
     }
 

@@ -1,6 +1,10 @@
 package util;
 
+import dao.Location;
+import dao.TrackedLocations;
+
 import java.sql.*;
+import java.util.*;
 
 public class MySQLConnection {
 
@@ -79,14 +83,39 @@ public class MySQLConnection {
             }
     }
 
-    public static void main(String... args){
+    public void addToDatabaseMap(Map<UUID, Location> map) {
+        try {
+            Statement statement = connection.createStatement();
+
+            for (Map.Entry<UUID, Location> entry : map.entrySet()) {
+                Location location = entry.getValue();
+                String sql = "INSERT INTO Locations (id, longtitude, latitude, city, region, country) VALUES ('" +
+                        location.getId() + "', '" +
+                        location.getLongtitude() + "', " +
+                        location.getLatitude() + ", '" +
+                        location.getCity() + "', '" +
+                        location.getRegion() + "', '" +
+                        location.getCountry() + "')";
+
+                statement.executeUpdate(sql);
+                System.out.println("Record added to the database");
+            }
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    public static void main(String... args) throws SQLException {
 
         MySQLConnection mySQLConnection = new MySQLConnection();
         mySQLConnection.connect();
         mySQLConnection.createTableLocations();
-        mySQLConnection.disconnect();
-
+        TrackedLocations trackedLocations = new TrackedLocations();
+        Map<UUID, Location> locationMap = trackedLocations.getLocations();
+        mySQLConnection.executeUpdate();
+        mySQLConnection.addToDatabaseMap(locationMap);
     }
-
-
 }
