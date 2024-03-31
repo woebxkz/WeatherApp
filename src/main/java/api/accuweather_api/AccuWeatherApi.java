@@ -1,4 +1,4 @@
-package accuweather_api;
+package api.accuweather_api;
 
 import com.google.gson.Gson;
 

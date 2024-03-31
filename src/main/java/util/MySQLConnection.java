@@ -55,7 +55,7 @@ public class MySQLConnection {
         try (Statement statement = connection.createStatement()) {
             final ResultSet resultSet = statement.executeQuery("SELECT * FROM Locations");
             while (resultSet.next()) {
-                System.out.println("ID " + resultSet.getInt("id"));
+                System.out.println("ID " + resultSet.getString("id"));
                 System.out.println("Longtitude " + resultSet.getDouble("longtitude"));
                 System.out.println("Latitude " + resultSet.getDouble("latitude"));
                 System.out.println("City " + resultSet.getString("city"));
@@ -64,23 +64,23 @@ public class MySQLConnection {
             }
         }
     }
-        //create table
-        public void createTableLocations() {
-            try {
-                Statement statement = connection.createStatement();
-                String sql = "CREATE TABLE IF NOT EXISTS Locations(id INT, " +
-                        "longtitude DOUBLE, " +
-                        "latitude DOUBLE, " +
-                        "city VARCHAR(50), " +
-                        "region VARCHAR(50), " +
-                        "country VARCHAR(50));";
-                statement.execute(sql);
-                System.out.println("Utworzono tabelę Locations");
-                statement.close();
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    //create table
+    public void createTableLocations() {
+        try {
+            Statement statement = connection.createStatement();
+            String sql = "CREATE TABLE IF NOT EXISTS Locations(id INT, " +
+                    "longtitude DOUBLE, " +
+                    "latitude DOUBLE, " +
+                    "city VARCHAR(50), " +
+                    "region VARCHAR(50), " +
+                    "country VARCHAR(50));";
+            statement.execute(sql);
+            System.out.println("Utworzono tabelę Locations");
+            statement.close();
+            //connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addToDatabaseMap(Map<UUID, Location> map) {
@@ -106,16 +106,44 @@ public class MySQLConnection {
         }
     }
 
+    public void addToDatabase(List<Location> list) {
+        try {
+            Statement statement = connection.createStatement();
+            for (int i = 0; i < list.size(); i++)
+            {
+                String sql = "INSERT INTO Locations VALUES('" +
+                        list.get(i).getId() + "','"
+                        + list.get(i).getLongtitude() + "',"
+                        + list.get(i).getLatitude() + ","
+                        + list.get(i).getCity() + ","
+                        + list.get(i).getRegion() + ","
+                        + list.get(i).getCountry() + ")";
+                statement.execute(sql);
+                System.out.println("Dodano rekord do bazy danych");
+            }
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
-    public static void main(String... args) throws SQLException {
+    public static void main(String... args) throws SQLException, CreationException {
 
         MySQLConnection mySQLConnection = new MySQLConnection();
         mySQLConnection.connect();
         mySQLConnection.createTableLocations();
         TrackedLocations trackedLocations = new TrackedLocations();
-        Map<UUID, Location> locationMap = trackedLocations.getLocations();
+
+        Location location = new Location(null,23,11,"city", "region","kraj");
+
+        trackedLocations.addLocation(location);
+        List<Location> locationMap = trackedLocations.getLocations();
+
+        mySQLConnection.addToDatabase(locationMap);
+
         mySQLConnection.executeUpdate();
-        mySQLConnection.addToDatabaseMap(locationMap);
+
     }
 }

@@ -5,6 +5,7 @@ import java.util.UUID;
 import util.CreationException;
 
 public class Location {
+
     private UUID id;
     private double longtitude; // długość geograficzna
     private double latitude; // szerokość geograficzna;
@@ -30,6 +31,10 @@ public class Location {
         this.city = city;
         this.region = region;
         this.country = country;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getCity() {

@@ -10,9 +10,9 @@ import java.util.function.Consumer;
 import com.google.gson.Gson;
 import dao.Location;
 import dao.TrackedLocations;
-import open_meteo_api.OpenMeteoApi;
-import open_meteo_api.OpenMeteoApiResults;
-import open_meteo_api.OpenMeteoVariables;
+import api.open_meteo_api.OpenMeteoApi;
+import api.open_meteo_api.OpenMeteoApiResults;
+import api.open_meteo_api.OpenMeteoVariables;
 import util.CreationException;
 
 public class Main {
@@ -87,8 +87,8 @@ public class Main {
                 String country = sc.next();
                 try {
                     loc = new Location(null, longtitude, latitude, city, region, country);
-                    System.out.println("Założono nową lokalizację " + loc.toString());
-                    locat.addLocation(loc.getId(), loc);
+                    System.out.println("Założono nową lokalizację " + loc.toString().toString());
+                    locat.addLocation(loc);
                 } catch (CreationException e) {
                     e.printStackTrace();
                 }
@@ -99,30 +99,16 @@ public class Main {
                 locat.removeLocation(cityToRemove);
                 break;
             case 3:
-//			System.out.println(locat.getLocations().size());
-//			for(Location l: locat.getLocations().values()) {
-//				System.out.println(l.toString());
-//			}
-//			locat.getLocations().values().forEach(System.out::println);
-//			locat.getLocations().values().stream().map(loc - > loc.toString())
                 locat.getLocations()
-                        .values()
                         .stream()
-                        .map(e-> e.toString())
+                        .map(Location::toString)
                         .peek(System.out::println)
                         .forEach(System.out::println);
-//			System.out.println("Tu liczba:" +);
                 break;
             default:
-                long l = locat.getLocations().values().stream()
-//				.map(e-> {
-//						licz++;
-//						System.out.println(licz + ": " + e.getClass().getSimpleName());
-//						return e.toString();}
-//					)
-                        .peek(streamConsumer).count();
-//			System.out.println("l = " + l);
-//			System.out.println(licznik);
+                long l = locat.getLocations().stream()
+                        .peek(streamConsumer)
+                        .count();
         }
     }
 
