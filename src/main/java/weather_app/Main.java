@@ -69,7 +69,6 @@ public class Main {
                 System.out.println(t);
                 System.out.println("");
             }
-
         };
         int akcja = sc.nextInt();
 
@@ -111,5 +110,4 @@ public class Main {
                         .count();
         }
     }
-
 }

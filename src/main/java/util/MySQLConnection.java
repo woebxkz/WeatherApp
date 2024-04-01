@@ -32,7 +32,6 @@ public class MySQLConnection {
         }
     }
 
-    // Metoda do zwracania obiektu Connection
     public Connection getConnection() {
         return connection;
     }
@@ -64,6 +63,7 @@ public class MySQLConnection {
             }
         }
     }
+
     //create table
     public void createTableLocations() {
         try {
@@ -78,29 +78,6 @@ public class MySQLConnection {
             System.out.println("Utworzono tabelę Locations");
             statement.close();
             //connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void addToDatabaseMap(Map<UUID, Location> map) {
-        try {
-            Statement statement = connection.createStatement();
-
-            for (Map.Entry<UUID, Location> entry : map.entrySet()) {
-                Location location = entry.getValue();
-                String sql = "INSERT INTO Locations (id, longtitude, latitude, city, region, country) VALUES ('" +
-                        location.getId() + "', '" +
-                        location.getLongtitude() + "', " +
-                        location.getLatitude() + ", '" +
-                        location.getCity() + "', '" +
-                        location.getRegion() + "', '" +
-                        location.getCountry() + "')";
-
-                statement.executeUpdate(sql);
-                System.out.println("Record added to the database");
-            }
-            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -122,7 +99,7 @@ public class MySQLConnection {
                 System.out.println("Dodano rekord do bazy danych");
             }
             statement.close();
-            connection.close();
+            //connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -139,11 +116,9 @@ public class MySQLConnection {
         Location location = new Location(null,23,11,"city", "region","kraj");
 
         trackedLocations.addLocation(location);
-        List<Location> locationMap = trackedLocations.getLocations();
+        List<Location> locationList = trackedLocations.getLocations();
 
-        mySQLConnection.addToDatabase(locationMap);
-
-        mySQLConnection.executeUpdate();
+        mySQLConnection.addToDatabase(locationList);
 
     }
 }
