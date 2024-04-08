@@ -88,13 +88,15 @@ public class MySQLConnection {
             Statement statement = connection.createStatement();
             for (int i = 0; i < list.size(); i++)
             {
-                String sql = "INSERT INTO Locations VALUES('" +
+                String sql = "INSERT INTO Locations" +
+                        "(id,longtitude,latitude,city,region,country)" +
+                        " VALUES('" +
                         list.get(i).getId() + "','"
                         + list.get(i).getLongtitude() + "',"
-                        + list.get(i).getLatitude() + ","
-                        + list.get(i).getCity() + ","
-                        + list.get(i).getRegion() + ","
-                        + list.get(i).getCountry() + ")";
+                        + list.get(i).getLatitude() + ",'"
+                        + list.get(i).getCity() + "','"
+                        + list.get(i).getRegion() + "','"
+                        + list.get(i).getCountry() + "')";
                 statement.execute(sql);
                 System.out.println("Dodano rekord do bazy danych");
             }
@@ -104,7 +106,6 @@ public class MySQLConnection {
             e.printStackTrace();
         }
     }
-
 
     public static void main(String... args) throws SQLException, CreationException {
 
@@ -119,6 +120,5 @@ public class MySQLConnection {
         List<Location> locationList = trackedLocations.getLocations();
 
         mySQLConnection.addToDatabase(locationList);
-
     }
 }
