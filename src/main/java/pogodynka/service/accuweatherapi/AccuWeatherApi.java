@@ -1,4 +1,4 @@
-package api.accuweather_api;
+package pogodynka.service.accuweatherapi;
 
 import com.google.gson.Gson;
 

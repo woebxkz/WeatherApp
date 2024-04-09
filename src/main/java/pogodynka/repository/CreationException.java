@@ -1,4 +1,4 @@
-package util;
+package pogodynka.repository;
 
 public class CreationException extends Exception{
 

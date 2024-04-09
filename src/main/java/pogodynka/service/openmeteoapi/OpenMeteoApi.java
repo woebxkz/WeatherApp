@@ -1,4 +1,4 @@
-package api.open_meteo_api;
+package pogodynka.service.openmeteoapi;
 
 import com.google.gson.Gson;
 

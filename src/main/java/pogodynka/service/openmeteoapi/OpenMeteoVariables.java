@@ -1,4 +1,4 @@
-package api.open_meteo_api;
+package pogodynka.service.openmeteoapi;
 
 public enum OpenMeteoVariables {
     TEMPERATURE("temperature_2m","Temperature (2 m)","°C"),

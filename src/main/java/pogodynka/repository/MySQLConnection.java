@@ -1,10 +1,16 @@
-package util;
+package pogodynka.repository;
 
-import dao.Location;
-import dao.TrackedLocations;
+
+
+import org.springframework.stereotype.Service;
+import pogodynka.dao.Location;
+import pogodynka.dao.TrackedLocations;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 
 public class MySQLConnection {
 
@@ -50,17 +56,24 @@ public class MySQLConnection {
     }
 
     //executeUpdate
-    public void executeUpdate() throws SQLException {
+    public List<Location> getAllLocations() throws SQLException {
         try (Statement statement = connection.createStatement()) {
             final ResultSet resultSet = statement.executeQuery("SELECT * FROM Locations");
+            List<Location> locations = new ArrayList<>();
             while (resultSet.next()) {
-                System.out.println("ID " + resultSet.getString("id"));
-                System.out.println("Longtitude " + resultSet.getDouble("longtitude"));
-                System.out.println("Latitude " + resultSet.getDouble("latitude"));
-                System.out.println("City " + resultSet.getString("city"));
-                System.out.println("Region " + resultSet.getString("region"));
-                System.out.println("Country " + resultSet.getString("country"));
+
+                locations.add(new Location(
+                        UUID.fromString(resultSet.getString("id")),
+                        resultSet.getDouble("longtitude"),
+                        resultSet.getDouble("latitude"),
+                        resultSet.getString("city"),
+                        resultSet.getString("region"),
+                        resultSet.getString("country")
+                ));
             }
+            return locations;
+        } catch (CreationException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -97,6 +110,7 @@ public class MySQLConnection {
                         + list.get(i).getCity() + "','"
                         + list.get(i).getRegion() + "','"
                         + list.get(i).getCountry() + "')";
+                System.out.println(sql);
                 statement.execute(sql);
                 System.out.println("Dodano rekord do bazy danych");
             }
@@ -107,18 +121,60 @@ public class MySQLConnection {
         }
     }
 
+    public void addToDatabase(Location location) {
+        try {
+            Statement statement = connection.createStatement();
+
+                String sql = "INSERT INTO Locations" +
+                        "(id,longtitude,latitude,city,region,country)" +
+                        " VALUES('" +
+                        location.getId() + "','"
+                        + location.getLongtitude() + "',"
+                        + location.getLatitude() + ",'"
+                        + location.getCity() + "','"
+                        + location.getRegion() + "','"
+                        + location.getCountry() + "')";
+                System.out.println(sql);
+                statement.execute(sql);
+                System.out.println("Dodano rekord do bazy danych");
+
+            statement.close();
+            //connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteRowByCityName(String city){
+
+        try {
+            Statement statement = connection.createStatement();
+            String sql = "DELETE FROM Locations WHERE city = '"+city+"';";
+            statement.execute(sql);
+            System.out.println("Usunięto miasto: " + city);
+            statement.close();
+            //connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
     public static void main(String... args) throws SQLException, CreationException {
 
         MySQLConnection mySQLConnection = new MySQLConnection();
         mySQLConnection.connect();
-        mySQLConnection.createTableLocations();
+        //mySQLConnection.createTableLocations();
         TrackedLocations trackedLocations = new TrackedLocations();
 
-        Location location = new Location(null,23,11,"city", "region","kraj");
+        Location location = new Location(null,56,44,"miasto", "region","22222222");
 
         trackedLocations.addLocation(location);
         List<Location> locationList = trackedLocations.getLocations();
 
         mySQLConnection.addToDatabase(locationList);
+
+
     }
 }

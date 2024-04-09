@@ -1,7 +1,8 @@
-package dao;
+package pogodynka.dao;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class TrackedLocations {
     private  List<Location> locations;

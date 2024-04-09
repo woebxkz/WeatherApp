@@ -1,8 +1,10 @@
-package dao;
+package pogodynka.dao;
 
-import java.sql.ResultSet;
+
+
+import pogodynka.repository.CreationException;
+
 import java.util.UUID;
-import util.CreationException;
 
 public class Location {
 
@@ -106,4 +108,3 @@ public class Location {
                 + ", country=" + country + "]";
     }
 }
-
