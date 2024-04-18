@@ -50,7 +50,6 @@ public class PogodynkaController {
         listParams.add(OpenMeteoVariables.WIND_SPEED);
         listParams.add(OpenMeteoVariables.WIND_DIRECTION);
 
-
         AccuWeatherApiLocationResponse[] locations = new AccuWeatherApi().getLocationsByCityName(city);
 
         List<ChartData> data = new ArrayList<>();

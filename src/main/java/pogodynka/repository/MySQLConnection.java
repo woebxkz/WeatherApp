@@ -1,8 +1,7 @@
 package pogodynka.repository;
 
-
-
-import org.springframework.stereotype.Service;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import pogodynka.dao.Location;
 import pogodynka.dao.TrackedLocations;
 
@@ -11,10 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-
+@Configuration
+@ConfigurationProperties(prefix = "database.config")
 public class MySQLConnection {
 
-    private static final String URL = "jdbc:mysql://109.241.162.43:33306/sda_pogodynka";
+    private String url; //= "jdbc:mysql://109.241.162.43:33306/sda_pogodynka";
     private static final String USER = "sda";
     private static final String PASSWORD = "sda2024MySQL";
 
@@ -27,7 +27,7 @@ public class MySQLConnection {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             // Nawiązanie połączenia
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            connection = DriverManager.getConnection(url, USER, PASSWORD);
             System.out.println("Połączono z bazą danych MySQL.");
         } catch (ClassNotFoundException e) {
             System.out.println("Nie można znaleźć sterownika JDBC.");
